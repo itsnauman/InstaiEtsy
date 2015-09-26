@@ -1,5 +1,6 @@
-from . import app, clarifai_api
+from . import app, clarifai_api, ETSY_API_KEY
 from flask import render_template
+import requests
 from pprint import pprint
 from instagram.client import InstagramAPI
 
@@ -28,6 +29,7 @@ def get_tags_for_photo(photo_url):
     tag_list = result['results'][0]['result']['tag']['classes']
     return tag_list
 
+<<<<<<< HEAD
 def get_etsy_results_simple(tag_list):
 	"""
     Returns a list of Etsy product listings based on image recognition results.
@@ -64,6 +66,11 @@ def get_etsy_results_ml(user_tags, tag_list):
 
     	#do something with Etsy API
 
+=======
+def get_etsy_products():
+    payload = {'api_key': ETSY_API_KEY}
+    res = requests.get('')
+>>>>>>> 1fabec0d75ac7c0297233d9d0950713fdfe2288a
 
 @app.route('/')
 def index():
