@@ -1,7 +1,6 @@
 from flask import Flask
+from clarifai.client import ClarifaiApi
 
 app = Flask(__name__)
-
-app.config['uOgH1zIg0WN1gDWHyevACltptRBPGttljs6VwuTI'] = '18p3NWU1Z_e5paBLLL8bk50ZPMWoOuk4U7cgR3Wj'
-#access token: E1R748x3rEp3mEr5F6rQIBEHPFf43w
+clarifai_api = ClarifaiApi(app_id="EnSVY5w5DxxvH2Fq-XrkHbdtge5favWmTNybItti", app_secret="TFlBASaMNs8S4VzRsxXQUQeMPoW46T9KbGXkzD3V")
 from . import controller
