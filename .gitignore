@@ -8,6 +8,7 @@ __pycache__/
 test.jpg
 
 # Distribution / packaging
+Include/
 .Python
 env/
 build/
