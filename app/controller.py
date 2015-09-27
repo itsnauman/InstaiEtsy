@@ -49,7 +49,7 @@ def keywordAlgo(liked_media):
     master = {}
     master[rough[0]] = 0
     for i in range(0,4):
-        range.append(tag5(get_tags_for_photo(liked_media[i])))
+        rough.append(tag5(get_tags_for_photo(liked_media[i])))
 
     for element in rough:
         if not element in master:
