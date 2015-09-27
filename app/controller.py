@@ -1,5 +1,5 @@
 from . import app, clarifai_api, ETSY_API_KEY
-from flask import render_template, request, session
+from flask import render_template, request, session, redirect, url_for
 from instagram.client import InstagramAPI
 import requests
 from instagram import client
@@ -65,7 +65,8 @@ def get_etsy_products(tags):
     t = [{'listing_id': item['listing_id'], 'url': item['url']}
                for item in res.json()['results']]
     print t[0]['listing_id']
-    return [i['listing_id'] for i in res.json()['results']]
+    # return [i['listing_id'] for i in res.json()['results']]
+    return t
 
 def get_listing_image(listing_id):
     try:
@@ -79,7 +80,7 @@ def get_listing_image(listing_id):
 def get_all_images(rec):
     all_images = []
     for each in rec:
-        img = get_listing_image(each)
+        img = get_listing_image(each['listing_id'])
         all_images.append(img)
     return all_images
 
@@ -87,7 +88,8 @@ def get_all_images(rec):
 def index():
     url = unauthenticated_api.get_authorize_url(
         scope=["likes", "comments"])
-    return '<a href="%s">Connect with Instagram</a>' % url
+    # return '<a href="%s">Connect with Instagram</a>' % url
+    return render_template('index.html', url=url)
 
 
 @app.route('/insta-auth')
@@ -108,7 +110,8 @@ def insta_auth():
         session['access_token'] = access_token
     except Exception as e:
         print(e)
-    return "<a href='/get-user-likes'>Get photos liked by user</a>"
+    # return "<a href='/get-user-likes'>Get photos liked by user</a>"
+    return redirect('/get-user-likes')
 
 
 @app.route('/get-user-likes')
@@ -130,9 +133,9 @@ def user_likes():
     rec = get_etsy_products(tags)
     r = get_all_images(rec)
 
-    return render_template('index.html', recs=r)
+    return render_template('product-suggest.html', recs=r)
 
 
 @app.errorhandler(404)
-def error(err):
-    return "Error, 404", 404
+def error(error):
+    return render_template('error.py', error=error), 404

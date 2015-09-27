@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>{{ error }}</h1>
+{% endblock %}

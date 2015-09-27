@@ -1,10 +1,25 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block header %}
+    <h1>InstaEtsy</h1>
+{% endblock %}
+
+{# {% block content %}
     <ul>
         {% for i in recs %}
             <li><img src="{{i}}" height="400px" width="400px"></li>
         {% endfor %}
     </ul>
 
+{% endblock %} #}
+
+{% block content %}
+    <p id="main">Get product recommendations from Etsy using your Instagram likes!</p>
+    <div style="text-align:center; margin-top:5em;">
+
+        <a class="btn-instagram" href="{{ url }}">
+          <div id="txt"><b>Sign in</b> with Instagram</div>
+        </a>
+
+    </div>
 {% endblock %}

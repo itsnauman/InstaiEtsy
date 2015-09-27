@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1><a href="/">InstaEtsy</a></h1>
+    <h2>Suggested Products!</h2>
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for i in recs %}
+            <div id="item">
+                <li><img src="{{i}}" height="500px" width="500px"></li>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}

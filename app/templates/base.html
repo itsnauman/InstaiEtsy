@@ -1,31 +1,162 @@
-{% extends "bootstrap/base.html" %}
-{% block title %}InstaEtsy{% endblock %}
+<html>
+  <head>
+    <title>InstaEtsy</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Montserrat:700,400">
+    <meta charset="UTF-8">
+    <style type="text/css">
+    body {
+    background:  repeat #14d495;
+    font-family: 'Montserrat', arial, sans-serif;
+    color: white;
+    text-rendering: optimizeLegibility;
+    text-align: center;
+    }
+    #main {
+    font-size: 30px;
+    }
+    #code_block {
+    font-size: 28px;
+    }
+    h1 {
+    font-size: 200px;
+    font-weight: 700;
+    text-rendering: optimizeLegibility;
+    }
+    .footer {
+    font-size: 20px;
+    position: fixed;
+    bottom: 0px;
+    }
+    #link {
+    text-decoration: none;
+    }
+    #txt {
+      color: black;
+    }
+    #error_msg {
+    font-size: 30px;
+    color: red;
+    }
+    a:link {
+      color:white;
+      text-decoration: none;
+      }      /* unvisited link */
+    a:visited {color:white;}  /* visited link */
+    a:hover {color:white;}  /* mouse over link */
+    a:active {color:white;}  /* selected link */
+        /* Base styles */
+    .btn-instagram {
+      font-size: 1.2em;
+      font-family: sans-serif;
+      text-shadow:1px 1px #fff;
+      text-decoration: none;
+      display:inline-block;
+      padding:0.5em 1.75em 0.5em 1em;
+      border-radius: 0.25em;
+      background: #f8f8f8;
+      border:1px solid #ccc;
+      border-right:0.25em solid #00558D; /* blue stripe */
+      position: relative;
+      margin:0 0 1px;
+    }
 
-{% block navbar %}
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">InstaEtsy</a>
+    .btn-instagram:before, .btn-instagram:after {
+      content:'';
+      display:block;
+      position: absolute;
+    }
+
+    /* Add Stripes */
+    .btn-instagram:before {
+      width:0.25em;
+      height: 100%;
+      background:#FBB03B; /* yellow stripe */
+      border-left:0.25em solid #D4145A; /* red stripe */
+      border-right:0.25em solid #00A99D; /* green stripe */
+      top:0;
+      right:0;
+    }
+
+    /* Add Hightlights */
+    .btn-instagram:after {
+      width:100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 0.25em;
+      padding-left: 0.25em;
+      box-shadow: inset 1px 1px 0px rgba(255,255,255,0.5), inset -1px -1px 0 rgba(0,0,0,0.1);
+
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.35)), color-stop(49%,rgba(255,255,255,0.2)), color-stop(50%,rgba(255,255,255,0)), color-stop(100%,rgba(0,0,0,0.1)));
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.2) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 100%);
+    background: -o-linear-gradient(top,  rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.2) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 100%);
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.2) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 100%);
+    background: linear-gradient(to bottom,  rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.2) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#59ffffff', endColorstr='#1a000000',GradientType=0 );
+
+    }
+
+
+    /* Animate - Fade */
+    .btn-instagram, .btn-instagram:before {
+        -webkit-transition-property: background, border;
+        -webkit-transition: 0.1s ease-in;
+        -moz-transition-property: background, border;
+        -moz-transition: 0.1s ease-in;
+        -o-transition-property: background, border;
+        -o-transition: 0.1s ease-in;
+        transition-property: background, border;
+        transition: 0.1s ease-in;
+
+    }
+
+    /* Hover / Focus */
+    .btn-instagram:hover, .btn-instagram:focus  {
+      background: #fff;
+    }
+
+    .btn-instagram:hover {
+      border-right:0.25em solid #09c;
+    }
+
+    .btn-instagram:hover:before {
+      background:#fc6; /* yellow stripe */
+      border-left:0.25em solid #f06; /* red stripe */
+      border-right:0.25em solid #0cc; /* green stripe */
+    }
+
+    .btn-instagram:hover:after {
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.25)), color-stop(49%,rgba(255,255,255,0.1)), color-stop(50%,rgba(255,255,255,0)), color-stop(100%,rgba(0,0,0,0.05)));
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.1) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.05) 100%);
+    background: -o-linear-gradient(top,  rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.1) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.05) 100%);
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.1) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.05) 100%);
+    background: linear-gradient(to bottom,  rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.1) 49%,rgba(255,255,255,0) 50%,rgba(0,0,0,0.05) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#40ffffff', endColorstr='#0d000000',GradientType=0 );
+
+    }
+
+    /* Active */
+    .btn-instagram:active {
+      margin:1px 0 0;
+    }
+    </style>
+  </head>
+  <body>
+    <a href="https://github.com/itsnauman/InstaEtsy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <div class="header">
+      {% block header %}{% endblock %}
     </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-      <!-- Login here -->
-      <form method="get" action="/">
-        <button type="submit" class="btn btn-default navbar-btn">Sign in</button>
-      </form>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-{% endblock %}
-
-{% block content %}
-{% endblock %}
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+      <footer>
+        <p>
+          Made with <3 during HackNY
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
