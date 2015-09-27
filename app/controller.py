@@ -3,6 +3,7 @@ from flask import render_template, request, session
 from instagram.client import InstagramAPI
 import requests
 from instagram import client
+import operator
 
 user_tags = {}
 
@@ -24,25 +25,17 @@ def get_tags_for_photo(photo_url):
     tag_list = result['results'][0]['result']['tag']['classes']
     return tag_list
 
-
-def update_user_tags(tag_list):
-    for tag in tag_list:
-        user_tags[tag] = 0
-
-
-def update_user_rankings_ML(user_tags, tag_list):
-    for key, val in user_tags:
-        for list_tag in tag_list:
-            if key == list_tag:
-                ++user_recs[key]
-
-
-def keywordAlgo(liked_media):
+def get_common_tags(photos):
+    """
+    Return a list of top five tags among liked photos by user
+    """
     rough = []
     master = {}
+
+    for each in photos:
+        rough.extend(tag5(get_tags_for_photo(each)))
+
     master[rough[0]] = 0
-    for i in range(0, 4):
-        range.append(tag5(get_tags_for_photo(liked_media[i])))
 
     for element in rough:
         if not element in master:
@@ -50,7 +43,9 @@ def keywordAlgo(liked_media):
         else:
             master[element] += 1
 
-    return (master)
+    sorted_master = tag5(sorted(master.iteritems(), key=operator.itemgetter(1), reverse=True))
+    final = [keyword[0] for keyword in sorted_master]
+    return final
 
 
 def tag5(long):
@@ -58,11 +53,11 @@ def tag5(long):
     return short
 
 
-def get_etsy_products():
+def get_etsy_products(tags):
     """
     Returns a list of all the matching items currently on sale at Etsy
     """
-    payload = {'api_key': ETSY_API_KEY, 'keywords': 'cats'}
+    payload = {'api_key': ETSY_API_KEY, 'keywords': tags}
     res = requests.get(
         'https://openapi.etsy.com/v2/listings/active', params=payload)
     return res.text
@@ -72,12 +67,14 @@ def get_etsy_products():
 def index():
     url = unauthenticated_api.get_authorize_url(
         scope=["likes", "comments"])
-    #return render_template('index.html', auth_url=url)
     return '<a href="%s">Connect with Instagram</a>' % url
 
 
 @app.route('/insta-auth')
 def insta_auth():
+    """
+    Instagram Redirect URI endpoint
+    """
     code = request.args.get("code")
     if not code:
         return 'Missing code'
@@ -101,10 +98,16 @@ def user_likes():
         return 'Missing Access Token'
     api = client.InstagramAPI(
         access_token=access_token, client_secret=CONFIG['client_secret'])
-    recent_media, next_ = api.user_recent_media()
+    recent_media, next_ = api.user_liked_media()
+
     photos = []
     for media in recent_media:
-        photos.append('<img src="%s"/>' % media.images['thumbnail'].url)
+        photos.append(media.images['standard_resolution'].url)
 
-    print photos
+    tags = get_common_tags(photos)
+    print get_etsy_products(tags)
     return "hello world"
+
+@app.errorhandler(404)
+def error(err):
+    return "Error, 404", 404
