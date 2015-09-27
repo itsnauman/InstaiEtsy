@@ -7,9 +7,9 @@
 
 {% block content %}
     <ul>
-        {% for i in recs %}
+        {% for each in recs %}
             <div id="item">
-                <li><img src="{{i}}" height="500px" width="500px"></li>
+                <li><img src="{{ each }}" height="500px" width="500px"></li>
             </div>
         {% endfor %}
     </ul>

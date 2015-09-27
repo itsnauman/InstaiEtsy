@@ -63,10 +63,11 @@ def get_etsy_products(tags):
     res = requests.get(
         'https://openapi.etsy.com/v2/listings/active', params=payload)
     t = [{'listing_id': item['listing_id'], 'url': item['url']}
-               for item in res.json()['results']]
+         for item in res.json()['results']]
     print t[0]['listing_id']
     # return [i['listing_id'] for i in res.json()['results']]
     return t
+
 
 def get_listing_image(listing_id):
     try:
@@ -77,12 +78,15 @@ def get_listing_image(listing_id):
     except Exception as e:
         print e
 
+
 def get_all_images(rec):
     all_images = []
     for each in rec:
         img = get_listing_image(each['listing_id'])
+        image_details = {}
         all_images.append(img)
     return all_images
+
 
 @app.route('/')
 def index():
@@ -99,7 +103,7 @@ def insta_auth():
     """
     code = request.args.get("code")
     if not code:
-        return 'Missing code'
+        return render_template('error.html', error="Missing code in request args")
     try:
         access_token, user_info = unauthenticated_api.exchange_code_for_access_token(
             code)
@@ -115,11 +119,11 @@ def insta_auth():
 
 
 @app.route('/get-user-likes')
-def user_likes():
+def get_user_likes():
     access_token = session['access_token']
 
     if not access_token:
-        return 'Missing Access Token'
+        return render_template('error.html', error="Missing Access Token")
 
     api = client.InstagramAPI(
         access_token=access_token, client_secret=CONFIG['client_secret'])
@@ -138,4 +142,4 @@ def user_likes():
 
 @app.errorhandler(404)
 def error(error):
-    return render_template('error.py', error=error), 404
+    return render_template('error.html', error=error), 404
