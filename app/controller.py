@@ -25,6 +25,7 @@ def get_tags_for_photo(photo_url):
     tag_list = result['results'][0]['result']['tag']['classes']
     return tag_list
 
+
 def get_common_tags(photos):
     """
     Return a list of top five tags among liked photos by user
@@ -43,7 +44,8 @@ def get_common_tags(photos):
         else:
             master[element] += 1
 
-    sorted_master = tag5(sorted(master.iteritems(), key=operator.itemgetter(1), reverse=True))
+    sorted_master = tag5(
+        sorted(master.iteritems(), key=operator.itemgetter(1), reverse=True))
     final = [keyword[0] for keyword in sorted_master]
     return final
 
@@ -105,8 +107,9 @@ def user_likes():
         photos.append(media.images['standard_resolution'].url)
 
     tags = get_common_tags(photos)
-    print get_etsy_products(tags)
+    print get_etsy_products(tags)['results']
     return "hello world"
+
 
 @app.errorhandler(404)
 def error(err):
