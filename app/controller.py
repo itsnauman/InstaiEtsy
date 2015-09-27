@@ -13,7 +13,8 @@ def get_user_insta_liked_media(USERID="user_id", COUNT=10, MAX_ID="max_id"):
 	liked_media = []
 	for like in recent_likes:
 	   liked_media.append('<img src="%s"/>' % media.images['thumbnail'].url)
-	return liked_media
+	
+    return liked_media
 
 def get_tags_for_photo(photo_url):
     """
@@ -24,38 +25,44 @@ def get_tags_for_photo(photo_url):
     tag_list = result['results'][0]['result']['tag']['classes']
     return tag_list
 
-def update_user_tags_and_recs(tag_list):
+def update_user_tags(tag_list):
 	for tag in tag_list:
 		user_tags[tag] = 0
 
-def update_rankings(user_tags, tag_list):
+def update_user_rankings_ML(user_tags, tag_list):
 	for key, val in user_tags:
 		for list_tag in tag_list:
 			if key==list_tag:
 				++user_recs[key]
 
-# def get_etsy_results_ml(user_tags, tag_list):
-# 	"""
-#     Returns a list of Etsy product listings based on image recognition results.
-#     """
-# 	#sorted by values (rank)
-# 	sorted_user_tags = sorted(user_tags.items(), key=operator.itemgetter(1))
+def keywordAlgo(liked_media):
+    rough = []
+    master = {}
+    master[rough[0]] = 0
+    for i in range(0,4):
+        range.append(tag5(get_tags_for_photo(liked_media[i])))
 
-# 	for key, val in user_tags:
-# 		for list_tag in tag_list:
-# 			if (key==list_tag) &&:
+    for element in rough:
+        if not element in master:
+            master[element] = 1
+        else:
+            master[element] += 1
 
-#     	#do something with Etsy API
+    return (master)
 
-def get_etsy_products(tag_list):
+def tag5(long):
+    short = [long[i] for i in (0,1,2,3,4)]
+    return short
+
+def get_etsy_products():
     """
-    Returns a list of all the matching items currenly on sale at Etsy
+    Returns a list of all the matching items currently on sale at Etsy
     """
-    payload = {'api_key': ETSY_API_KEY, 'keywords': tag_list}
+    payload = {'api_key': ETSY_API_KEY, 'keywords': 'cats'}
     res = requests.get('https://openapi.etsy.com/v2/listings/active', params=payload)
     return res.text
 
 @app.route('/')
 def index():
-    print get_etsy_products()
+    print(keywordAlgo())
     return "Hello World"
