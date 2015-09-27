@@ -1,11 +1,20 @@
-from . import app, clarifai_api, ETSY_API_KEY, insta_api
-from flask import render_template
+from . import app, clarifai_api, ETSY_API_KEY
+from flask import render_template, request, session
+from instagram.client import InstagramAPI
 import requests
-from pprint import pprint
+from instagram import client
 
 user_tags = {}
 
-def get_user_insta_liked_media(USERID="user_id", COUNT=10, MAX_ID="max_id"):
+CONFIG = {
+    'client_id': '5d99f0fac1084de5a71f889452248123',
+    'client_secret': 'aba8aa200eaf417ca9ef54a9b83eddfd',
+    'redirect_uri': 'https://172e3628.ngrok.com/insta-auth'
+}
+
+unauthenticated_api = client.InstagramAPI(**CONFIG)
+
+def get_user_instagram_likes(user_id, count=10, max_id="max_id"):
 	"""
     Returns a list of all the recently liked media by the Instagram user.
     """
@@ -64,5 +73,42 @@ def get_etsy_products():
 
 @app.route('/')
 def index():
+<<<<<<< HEAD
     print(keywordAlgo())
     return "Hello World"
+=======
+    try:
+        url = unauthenticated_api.get_authorize_url(scope=["likes","comments"])
+        return '<a href="%s">Connect with Instagram</a>' % url
+    except Exception as e:
+        print(e)
+
+@app.route('/insta-auth')
+def on_callback():
+    code = request.args.get("code")
+    if not code:
+        return 'Missing code'
+    try:
+        access_token, user_info = unauthenticated_api.exchange_code_for_access_token(code)
+        if not access_token:
+            return 'Could not get access token'
+        api = client.InstagramAPI(access_token=access_token, client_secret=CONFIG['client_secret'])
+        session['access_token'] = access_token
+    except Exception as e:
+        print(e)
+    return "<a href='/get-user-likes'>Get photos liked by user</a>"
+
+@app.route('/get-user-likes')
+def user_likes():
+    access_token = session['access_token']
+    if not access_token:
+        return 'Missing Access Token'
+    api = client.InstagramAPI(access_token=access_token, client_secret=CONFIG['client_secret'])
+    recent_media, next_ = api.user_liked_media()
+    photos = []
+    for media in recent_media:
+        photos.append('<img src="%s"/>' % media.images['thumbnail'].url)
+
+    print photos
+    return "hello world"
+>>>>>>> origin
