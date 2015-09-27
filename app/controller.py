@@ -62,10 +62,9 @@ def get_etsy_products(tags):
     payload = {'api_key': ETSY_API_KEY, 'keywords': tags}
     res = requests.get(
         'https://openapi.etsy.com/v2/listings/active', params=payload)
-    t = [{'listing_id': item['listing_id'], 'url': item['url']}
+    print res.text
+    t = [{'listing_id': item['listing_id'], 'url': item['url'], 'title': item['title']}
          for item in res.json()['results']]
-    print t[0]['listing_id']
-    # return [i['listing_id'] for i in res.json()['results']]
     return t
 
 
@@ -83,8 +82,9 @@ def get_all_images(rec):
     all_images = []
     for each in rec:
         img = get_listing_image(each['listing_id'])
-        image_details = {}
-        all_images.append(img)
+        image_details = {
+            'image': img, 'url': each['url'], 'title': each['title']}
+        all_images.append(image_details)
     return all_images
 
 
@@ -92,7 +92,6 @@ def get_all_images(rec):
 def index():
     url = unauthenticated_api.get_authorize_url(
         scope=["likes", "comments"])
-    # return '<a href="%s">Connect with Instagram</a>' % url
     return render_template('index.html', url=url)
 
 
@@ -114,7 +113,6 @@ def insta_auth():
         session['access_token'] = access_token
     except Exception as e:
         print(e)
-    # return "<a href='/get-user-likes'>Get photos liked by user</a>"
     return redirect('/get-user-likes')
 
 

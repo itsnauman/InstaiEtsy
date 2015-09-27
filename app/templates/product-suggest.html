@@ -9,7 +9,10 @@
     <ul>
         {% for each in recs %}
             <div id="item">
-                <li><img src="{{ each }}" height="500px" width="500px"></li>
+                <li>
+                <h3><a href="{{ each.url }}">{{ each.title }}</a></h3>
+                <img class="hover" src="{{ each.image }}" height="500px" width="500px">
+                </li>
             </div>
         {% endfor %}
     </ul>
