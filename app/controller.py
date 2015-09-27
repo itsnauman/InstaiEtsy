@@ -62,8 +62,26 @@ def get_etsy_products(tags):
     payload = {'api_key': ETSY_API_KEY, 'keywords': tags}
     res = requests.get(
         'https://openapi.etsy.com/v2/listings/active', params=payload)
-    return res.text
+    t = [{'listing_id': item['listing_id'], 'url': item['url']}
+               for item in res.json()['results']]
+    print t[0]['listing_id']
+    return [i['listing_id'] for i in res.json()['results']]
 
+def get_listing_image(listing_id):
+    try:
+        payload = {'api_key': ETSY_API_KEY}
+        res = requests.get(
+            'https://openapi.etsy.com/v2/listings/%i/images' % listing_id, params=payload)
+        return res.json()['results'][0]['url_fullxfull']
+    except Exception as e:
+        print e
+
+def get_all_images(rec):
+    all_images = []
+    for each in rec:
+        img = get_listing_image(each)
+        all_images.append(img)
+    return all_images
 
 @app.route('/')
 def index():
@@ -96,8 +114,10 @@ def insta_auth():
 @app.route('/get-user-likes')
 def user_likes():
     access_token = session['access_token']
+
     if not access_token:
         return 'Missing Access Token'
+
     api = client.InstagramAPI(
         access_token=access_token, client_secret=CONFIG['client_secret'])
     recent_media, next_ = api.user_liked_media()
@@ -107,8 +127,10 @@ def user_likes():
         photos.append(media.images['standard_resolution'].url)
 
     tags = get_common_tags(photos)
-    print get_etsy_products(tags)['results']
-    return "hello world"
+    rec = get_etsy_products(tags)
+    r = get_all_images(rec)
+
+    return render_template('index.html', recs=r)
 
 
 @app.errorhandler(404)

@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hello World</h1>
+    <ul>
+        {% for i in recs %}
+            <li><img src="{{i}}" height="400px" width="400px"></li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
