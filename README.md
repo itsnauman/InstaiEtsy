@@ -1,1 +1,3 @@
-# hackNY
+# InstaEtsy
+
+Webapp built for hackNY.

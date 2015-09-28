@@ -1,17 +1,10 @@
-from . import app, clarifai_api, ETSY_API_KEY
-from flask import render_template, request, session, redirect, url_for
+from . import app, clarifai_api, ETSY_API_KEY, CONFIG
+from flask import render_template, request, session, redirect
 from instagram.client import InstagramAPI
-import requests
 from instagram import client
+
+import requests
 import operator
-
-user_tags = {}
-
-CONFIG = {
-    'client_id': '5d99f0fac1084de5a71f889452248123',
-    'client_secret': 'aba8aa200eaf417ca9ef54a9b83eddfd',
-    'redirect_uri': 'https://172e3628.ngrok.com/insta-auth'
-}
 
 unauthenticated_api = client.InstagramAPI(**CONFIG)
 
@@ -62,23 +55,21 @@ def get_etsy_products(tags):
     payload = {'api_key': ETSY_API_KEY, 'keywords': tags}
     res = requests.get(
         'https://openapi.etsy.com/v2/listings/active', params=payload)
-    print res.text
-    t = [{'listing_id': item['listing_id'], 'url': item['url'], 'title': item['title']}
-         for item in res.json()['results']]
+    t = [{'listing_id': item['listing_id'], 'url': item['url'], 'title': item['title']} for item in res.json()['results']]
     return t
 
 
 def get_listing_image(listing_id):
-    try:
-        payload = {'api_key': ETSY_API_KEY}
-        res = requests.get(
-            'https://openapi.etsy.com/v2/listings/%i/images' % listing_id, params=payload)
-        return res.json()['results'][0]['url_fullxfull']
-    except Exception as e:
-        print e
+    payload = {'api_key': ETSY_API_KEY}
+    res = requests.get(
+        'https://openapi.etsy.com/v2/listings/%i/images' % listing_id, params=payload)
+    return res.json()['results'][0]['url_fullxfull']
 
 
 def get_all_images(rec):
+    """
+    Extract image link from a Etsy product link
+    """
     all_images = []
     for each in rec:
         img = get_listing_image(each['listing_id'])
