@@ -94,16 +94,13 @@ def insta_auth():
     code = request.args.get("code")
     if not code:
         return render_template('error.html', error="Missing code in request args")
-    try:
-        access_token, user_info = unauthenticated_api.exchange_code_for_access_token(
-            code)
-        if not access_token:
-            return 'Could not get access token'
-        api = client.InstagramAPI(
-            access_token=access_token, client_secret=CONFIG['client_secret'])
-        session['access_token'] = access_token
-    except Exception as e:
-        print(e)
+    access_token, user_info = unauthenticated_api.exchange_code_for_access_token(
+        code)
+    if not access_token:
+        return 'Could not get access token'
+    api = client.InstagramAPI(
+        access_token=access_token, client_secret=CONFIG['client_secret'])
+    session['access_token'] = access_token
     return redirect('/get-user-likes')
 
 
