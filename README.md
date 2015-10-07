@@ -1,3 +1,4 @@
 # InstaEtsy
+Get product recommendation from Etsy based on your Instagram likes!
 
-Webapp built for hackNY.
+Built during hackNY Hackathon!
